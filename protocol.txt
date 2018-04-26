@@ -1,0 +1,2 @@
+1. obtain data: rap lyrics
+https://tmthyjames.github.io/posts/Analyzing-Rap-Lyrics-Using-Word-Vectors/
