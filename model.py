@@ -22,7 +22,7 @@ train_mode = False
 #artist = "jay_z"  # used when saving the trained model
 artist = "top100"
 rap_file = "neural_rap.txt"  # where the rap is written to
-nbr_predicted_lines = 1
+nbr_predicted_line_pairs = 20
 
 lyrics_library_file = "lyrics_lib.pickle"
 
@@ -156,14 +156,34 @@ def rhyme(line, rhyme_list):
     try:
         # the two letters picked for rhyming - the last words of the rhyme line ends with these letters
         rhymescheme = max(set(rhymeslistends), key=rhymeslistends.count)
-    except Exception as e:
+    except Exception as e1:
+        # list of rhymes was empty
         rhymescheme = word[-2:]
+
+    if not rhymescheme in rhyme_list:
+        found = False
+
+        for possible_rhyme in rhymeslistends:
+            if possible_rhyme in rhyme_list:
+                rhymescheme = possible_rhyme
+                found = True
+                break
+
+        if found == False and len(rhymescheme) > 1 and rhymescheme[1] not in "abcdefghijklmnopqrstuvwxyz":
+            rhymescheme = rhymescheme[0]
+
+            if not rhymescheme in rhyme_list:
+                rhymescheme = random.choice(rhyme_list)
+
     try:
         float_rhyme = rhyme_list.index(rhymescheme)
-        float_rhyme = float_rhyme / float(len(rhyme_list))
-        return float_rhyme
-    except Exception:
+    except Exception as e:
+        # this should never happen
+        print(e)
         return None
+
+    float_rhyme = float_rhyme / float(len(rhyme_list))
+    return float_rhyme
 
 
 # grabs each line of the lyrics file and puts them
@@ -291,7 +311,12 @@ def compose_rap(lines, rhyme_list, lyrics_file, model):
     # choose a random line to start in from given lyrics
     initial_index = random.choice(range(len(human_lyrics) - 1))
     # create an initial_lines list consisting of 2 lines
-    initial_lines = human_lyrics[initial_index:initial_index + 2]
+    initial_lines = human_lyrics[initial_index:initial_index + nbr_predicted_line_pairs * 2]
+
+#     initial_lines = ["Dear mama, I'm caught up in this sickness",
+# "I rob my adversaries, but Slick done left a witness",
+# "Wonder if they'll catch me, or will this nigga snitch",
+# "Should I shoot his bitch, or make the nigga rich?"]
 
     print("initial_lines: ", initial_lines)
 
@@ -307,13 +332,13 @@ def compose_rap(lines, rhyme_list, lyrics_file, model):
     # predict generates output predictions for the given samples
     # it's reshaped as a (1, 2, 2) so that the model can predict each
     # 2x2 matrix of [syllable, rhyme_index] pairs
-    starting_vectors = model.predict(np.array([starting_input]).flatten().reshape(1, 2, 2))
+    starting_vectors = model.predict(np.array([starting_input]).flatten().reshape(nbr_predicted_line_pairs, 2, 2))
     rap_vectors.append(starting_vectors)
 
     print(rap_vectors)
 
-    for i in range(nbr_predicted_lines - 1):
-        rap_vectors.append(model.predict(np.array([rap_vectors[-1]]).flatten().reshape(4, 2, 2)))
+    for i in range(nbr_predicted_line_pairs - 1):
+        rap_vectors.append(model.predict(np.array([rap_vectors[-1]]).flatten().reshape(nbr_predicted_line_pairs, 2, 2)))
 
     return rap_vectors
 
@@ -357,19 +382,10 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
     # vector_half is a single [syllable, rhyme_index] pair
     # returns a score rating for a given line
     def calculate_score(vector_half, syllables, rhyme, penalty):
+        # number of desired syllabes divided by maxsyllables
         desired_syllables = vector_half[0]
+        # index of desired rhyme in list of rhymes, scaled to 0..1 -> original index/length of rhyme_list
         desired_rhyme = vector_half[1]
-        # desired_syllables is the number of syllables we want
-        desired_syllables = desired_syllables * maxsyllables
-        # desired rhyme is the index of the rhyme we want
-        desired_rhyme = desired_rhyme * len(rhyme_list)
-
-        # print(vector_half)
-        # print(desired_syllables)
-        # print(syllables)
-        # print(penalty)
-        # print(desired_rhyme)
-        # print(rhyme)
 
         # generate a score by subtracting from 1 the sum of the difference between
         # predicted syllables and generated syllables and the difference between
