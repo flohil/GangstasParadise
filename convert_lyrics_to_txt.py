@@ -12,7 +12,7 @@ if os.path.isfile(txt_path):
 for csv_name in glob.glob(csv_paths):
     print("reading in: ", csv_name)
 
-    with open(csv_name, errors="replace", encoding="UTF-8") as csv_file, open(txt_path, 'a', encoding="UTF-8") as txt_file:
+    with open(csv_name, errors="replace") as csv_file, open(txt_path, 'a') as txt_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
 
         # skip header line

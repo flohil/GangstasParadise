@@ -107,7 +107,7 @@ def rhymeindex(lyrics):
             rhymeslist = pronouncing.rhymes(word)
 
             # need to convert the unicode rhyme words to UTF8
-            rhymeslist = [str(x.encode('UTF8')) for x in rhymeslist]
+            # rhymeslist = [str(x.encode('UTF8')) for x in rhymeslist]
             # rhymeslistends contains the last two characters for each word
             # that could potentially rhyme with our word
 
