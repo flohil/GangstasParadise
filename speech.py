@@ -1,4 +1,4 @@
-import pyttsx
+import pyttsx3
 import subprocess
 import threading
 from time import sleep
@@ -14,7 +14,7 @@ def play_mp3(path):
     subprocess.Popen(['mpg123', '-q', path]).wait()
 
 
-engine = pyttsx.init()
+engine = pyttsx3.init()
 
 def letters(input):
     valids = []

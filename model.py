@@ -10,6 +10,7 @@ from keras.models import Sequential
 from keras.layers import LSTM
 from keras.layers import Dense
 
+import pickle
 import sys
 
 print(sys.argv)
@@ -21,6 +22,9 @@ train_mode = False
 #artist = "jay_z"  # used when saving the trained model
 artist = "top100"
 rap_file = "neural_rap.txt"  # where the rap is written to
+nbr_predicted_lines = 1
+
+lyrics_library_file = "lyrics_lib.pickle"
 
 if len(sys.argv) > 1 and sys.argv[1] == '-t':
     train_mode = True
@@ -91,7 +95,7 @@ def syllables(line):
 def rhymeindex(lyrics):
     if str(artist) + ".rhymes" in os.listdir(".") and train_mode == False:
         print ("loading saved rhymes from " + str(artist) + ".rhymes")
-        return open(str(artist) + ".rhymes", "r").read().split("\n")
+        return open(str(artist) + ".rhymes", "r", encoding="UTF-8").read().split("\n")
     else:
         rhyme_master_list = []
         print ("Alright, building the list of all the rhymes")
@@ -141,16 +145,18 @@ def rhymeindex(lyrics):
 
 # converts the index of the most common rhyme ending
 # into a float
+# rhyme_list holds combinations of the last two letters of words and is used to map them to an index
 def rhyme(line, rhyme_list):
     word = re.sub(r"\W+", '', line.split(" ")[-1]).lower()
-    rhymeslist = pronouncing.rhymes(word)
-    rhymeslist = [str(x.encode('UTF8')) for x in rhymeslist]
+    rhymeslist = pronouncing.rhymes(word) # list of words that rhyme with the last word of the current line
+    # rhymeslist = [str(x.encode('UTF8')) for x in rhymeslist]
     rhymeslistends = []
     for i in rhymeslist:
-        rhymeslistends.append(i[-2:])
+        rhymeslistends.append(str(i)[-2:])
     try:
+        # the two letters picked for rhyming - the last words of the rhyme line ends with these letters
         rhymescheme = max(set(rhymeslistends), key=rhymeslistends.count)
-    except Exception:
+    except Exception as e:
         rhymescheme = word[-2:]
     try:
         float_rhyme = rhyme_list.index(rhymescheme)
@@ -178,34 +184,54 @@ def generate_lyrics(lyrics_file):
     last_words = []
     lyriclength = len(open(lyrics_file, encoding='UTF-8').read().split("\n"))
     count = 0
-    markov_model = markov(lyrics_file)
 
-    while len(bars) < lyriclength / 9 and count < lyriclength * 2:
-        # By default, the make_sentence method tries, a maximum of 10 times per invocation,
-        # to make a sentence that doesn't overlap too much with the original text.
-        # If it is successful, the method returns the sentence as a string.
-        # If not, it returns None. (https://github.com/jsvine/markovify)
-        bar = markov_model.make_sentence()
+    if not os.path.isfile(lyrics_library_file):
+        markov_model = markov(lyrics_file)
+        iterations = 0
 
-        # make sure the bar isn't 'None' and that the amount of
-        # syllables is under the max syllables
-        if type(bar) != type(None) and syllables(bar) < 1:
+        print("created markov")
+        print("lyric length: ", lyriclength)
+        print("target length: ", lyriclength / 9)
+        print("max length: ", lyriclength * 2)
 
-            # function to get the last word of the bar
-            def get_last_word(bar):
-                last_word = bar.split(" ")[-1]
-                # if the last word is punctuation, get the word before it
-                if last_word[-1] in "!.?,":
-                    last_word = last_word[:-1]
-                return last_word
+        while len(bars) < lyriclength / 9 and iterations < lyriclength:
+            # By default, the make_sentence method tries, a maximum of 10 times per invocation,
+            # to make a sentence that doesn't overlap too much with the original text.
+            # If it is successful, the method returns the sentence as a string.
+            # If not, it returns None. (https://github.com/jsvine/markovify)
+            bar = markov_model.make_sentence()
 
-            last_word = get_last_word(bar)
-            # only use the bar if it is unique and the last_word
-            # has only been seen less than 3 times
-            if bar not in bars and last_words.count(last_word) < 3:
-                bars.append(bar)
-                last_words.append(last_word)
-                count += 1
+            iterations += 1
+
+            # make sure the bar isn't 'None' and that the amount of
+            # syllables is under the max syllables
+            if type(bar) != type(None) and syllables(bar) < 1:
+
+                # function to get the last word of the bar
+                def get_last_word(bar):
+                    last_word = bar.split(" ")[-1]
+                    # if the last word is punctuation, get the word before it
+                    if last_word[-1] in "!.?,":
+                        last_word = last_word[:-1]
+                    return last_word
+
+                last_word = get_last_word(bar)
+                # only use the bar if it is unique and the last_word
+                # has only been seen less than 3 times
+                if bar not in bars and last_words.count(last_word) < 3:
+                    bars.append(bar)
+                    last_words.append(last_word)
+                    count += 1
+                    print(count)
+
+        with open(lyrics_library_file, 'wb') as handle:
+            pickle.dump(bars, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    else:
+        with open(lyrics_library_file, 'rb') as handle:
+            bars = pickle.load(handle)
+
+    print("finished generating lyrics")
 
     return bars
 
@@ -262,17 +288,18 @@ def compose_rap(lines, rhyme_list, lyrics_file, model):
     rap_vectors = []
     human_lyrics = split_lyrics_file(lyrics_file)
 
-    print("lines: ", lines)
-    print("rhyme_list: ", rhyme_list)
-
     # choose a random line to start in from given lyrics
     initial_index = random.choice(range(len(human_lyrics) - 1))
     # create an initial_lines list consisting of 2 lines
-    initial_lines = human_lyrics[initial_index:initial_index + 8]
+    initial_lines = human_lyrics[initial_index:initial_index + 2]
+
+    print("initial_lines: ", initial_lines)
 
     starting_input = []
     for line in initial_lines:
         # appends a [syllable, rhyme_index] pair to starting_input
+        # syllables: percentage of syllables / maxsyllables => eg. 11/16
+        # rhyme: position of the last two letters of the last word of the rhyming line in the rhyme_list -> eg. 28/819
         starting_input.append([syllables(line), rhyme(line, rhyme_list)])
 
     print(starting_input)
@@ -280,12 +307,12 @@ def compose_rap(lines, rhyme_list, lyrics_file, model):
     # predict generates output predictions for the given samples
     # it's reshaped as a (1, 2, 2) so that the model can predict each
     # 2x2 matrix of [syllable, rhyme_index] pairs
-    starting_vectors = model.predict(np.array([starting_input]).flatten().reshape(4, 2, 2))
+    starting_vectors = model.predict(np.array([starting_input]).flatten().reshape(1, 2, 2))
     rap_vectors.append(starting_vectors)
 
     print(rap_vectors)
 
-    for i in range(49):
+    for i in range(nbr_predicted_lines - 1):
         rap_vectors.append(model.predict(np.array([rap_vectors[-1]]).flatten().reshape(4, 2, 2)))
 
     return rap_vectors
@@ -301,16 +328,26 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
     # uncreative
     def last_word_compare(rap, line2):
         penalty = 0
+
+        word2 = line2.split(" ")[-1]
+
+        while word2[-1] in "?!,. ":
+            word2 = word2[:-1]
+
+            # there is only punctuation in the word and nothing else
+            if len(word2) == 0:
+                return 1000 # return a very high penalty
+
         for line1 in rap:
             word1 = line1.split(" ")[-1]
-            word2 = line2.split(" ")[-1]
 
             # remove any punctuation from the words
             while word1[-1] in "?!,. ":
                 word1 = word1[:-1]
 
-            while word2[-1] in "?!,. ":
-                word2 = word2[:-1]
+                # there is only punctuation in the word and nothing else
+                if len(word1) == 0:
+                    return 1000  # return a very high penalty
 
             if word1 == word2:
                 penalty += 0.2
@@ -327,12 +364,12 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
         # desired rhyme is the index of the rhyme we want
         desired_rhyme = desired_rhyme * len(rhyme_list)
 
-        print(vector_half)
-        print(desired_syllables)
-        print(syllables)
-        print(penalty)
-        print(desired_rhyme)
-        print(rhyme)
+        # print(vector_half)
+        # print(desired_syllables)
+        # print(syllables)
+        # print(penalty)
+        # print(desired_rhyme)
+        # print(rhyme)
 
         # generate a score by subtracting from 1 the sum of the difference between
         # predicted syllables and generated syllables and the difference between
@@ -353,7 +390,7 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
 
     vector_halves = []
 
-    print(vectors)
+    print("dataset: ", len(dataset))
 
     for vector in vectors:
         # vectors are the 2x2 rap_vectors (predicted bars) generated by compose_rap()
@@ -368,7 +405,7 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
         # by the model. This bar is then added to the final rap and also removed from the
         # generated lyrics (dataset) so that we don't get duplicate lines in the final rap.
         scorelist = []
-        for item in dataset:
+        for index, item in enumerate(dataset):
             # item is one of the generated bars from the Markov model
             line = item[0]
 
@@ -419,9 +456,12 @@ def train(x_data, y_data, model):
 
 def main(depth, train_mode):
     model = create_network(depth)
+
+    print("created network")
+
     # change the lyrics file to the file with the lyrics you want to be trained on
     text_file = "top100_lyrics.txt"
-    #
+    #text_file = "input.txt"
     #text_file = "lyrics.txt"
 
     if train_mode == True:
@@ -429,6 +469,7 @@ def main(depth, train_mode):
 
     if train_mode == False:
         bars = generate_lyrics(text_file)
+        print("generated lyrics")
 
     rhyme_list = rhymeindex(bars)
     if train_mode == True:
@@ -438,9 +479,10 @@ def main(depth, train_mode):
     if train_mode == False:
         vectors = compose_rap(bars, rhyme_list, text_file, model)
 
-        print(vectors)
-
         rap = vectors_into_song(vectors, bars, rhyme_list)
+
+        print(rap)
+
         f = open(rap_file, "w", encoding="UTF-8")
         for bar in rap:
             f.write(bar)
