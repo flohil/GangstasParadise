@@ -2,7 +2,7 @@ import csv
 import glob
 import os.path
 
-csv_paths = "data/artists/*.csv"
+csv_paths = "data/top5/*.csv"
 txt_path = "data/input.txt"
 filter_chars = set('()[]:+*>')
 

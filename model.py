@@ -19,12 +19,12 @@ depth = 4  # depth of the network. changing will require a retrain
 maxsyllables = 16  # maximum syllables per line. Change this freely without retraining the network
 train_mode = False
 #artist = "kanye_west"
-#artist = "jay_z"  # used when saving the trained model
-artist = "top100"
+artist = "jay_z"  # used when saving the trained model
+#artist = "top5"
 rap_file = "neural_rap.txt"  # where the rap is written to
-nbr_predicted_line_pairs = 20
+nbr_predicted_line_pairs = 4
 
-lyrics_library_file = "lyrics_lib.pickle"
+lyrics_library_file = artist + "_lyrics_lib.pickle"
 
 if len(sys.argv) > 1 and sys.argv[1] == '-t':
     train_mode = True
@@ -87,7 +87,10 @@ def syllables(line):
             count += 1
         if count == 0:
             count += 1
-    return count / maxsyllables
+
+    result = count // maxsyllables
+
+    return result
 
 
 # writes a rhyme list to a rhymes file that allows for use when
@@ -309,7 +312,7 @@ def compose_rap(lines, rhyme_list, lyrics_file, model):
     human_lyrics = split_lyrics_file(lyrics_file)
 
     # choose a random line to start in from given lyrics
-    initial_index = random.choice(range(len(human_lyrics) - 1))
+    initial_index = 0 # random.choice(range(len(human_lyrics) - 1))
     # create an initial_lines list consisting of 2 lines
     initial_lines = human_lyrics[initial_index:initial_index + nbr_predicted_line_pairs * 2]
 
@@ -476,9 +479,10 @@ def main(depth, train_mode):
     print("created network")
 
     # change the lyrics file to the file with the lyrics you want to be trained on
-    text_file = "top100_lyrics.txt"
+    # text_file = "top100_lyrics.txt"
+    #text_file = "top5_lyrics.txt"
     #text_file = "input.txt"
-    #text_file = "lyrics.txt"
+    text_file = "lyrics.txt"
 
     if train_mode == True:
         bars = split_lyrics_file(text_file)
