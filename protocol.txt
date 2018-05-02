@@ -1,7 +1,0 @@
-1. obtain data: rap lyrics
-https://tmthyjames.github.io/posts/Analyzing-Rap-Lyrics-Using-Word-Vectors/
-
-2.remove lines that contain one of the following:
-(, ), [, ], :, +
-
-https://github.com/robbiebarrat/rapping-neural-network

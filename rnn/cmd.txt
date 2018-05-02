@@ -1,0 +1,3 @@
+
+https://github.com/jayIves/rhyme-rnn-tensorflow
+python naiveSample.py --forward_dir=save/top5 --reversed_dir=reversed/top5 --post_dir=post/top5 --sample=2 -n 1000 > finalSamples/Naiive/top5.txt

@@ -1,0 +1,59 @@
+präsentation:
+
+sprechen über unterschiedliche approaches:
+- markov chain und nur anzahl an syllables und rhyme endings lernen 
+  - sehr wenig aufwand - schnelle trainingszeiten (1-2h)
+  - markov: generierte sätze recht gute resultate, jedoch eher "cheating"
+  - problem: es werden großteils gleiche sätze generiert
+  - temperature: randomness (exp, log, gaussche verteilung) -> sätze die gar keinen sinn machen
+  - daher abgebrochen
+  - allerdings war reimen an sich ziemlich gut -> 
+     - dictionary mit letzten zwei buchstaben
+     - pyhton module pronounciation: wörter, die sich auf ein wort reimen ->
+       davon wieder die letzten zwei buchstaben
+- word rnn
+  - vorteile: keine wörter, die es nicht gibt
+  - nachteil: generierter text nach ein paar sätzen fast immer ident
+  - nach randomness: sätze ergeben keinen sinn (auch davor schon ziemlich schlecht)
+  - sehr großes vokabular (für jedes wort 1 eintrag)
+     - one hot encoding bräuchte sehr viel speicher
+     - word2vec mit python gensim
+       - leiwand für textanalyse: versucht, wort in kontext (wörter davor and danach) zu deuten
+       - vector mit länge zb 50: gewichte beinhalten information über kontext und wort selbst
+       - sehr cool: kann zb king - man = queen
+       - embeddings: discrete objects (zb words) als vectors mit real numbers abbilden
+- char rnn
+  - viel kleineres vokabular -> 26 buchstaben und punctuation...
+  - jedoch längere sequenzen zu lernen als bei wörtern
+  - pretty good results
+  - very long training:
+    - 24h gtx 1070
+    - rnn_size = 512
+    - layers = 2
+    - mini_batch = 50
+    - sequ_length = 256
+    - iterations = 50
+  - https://github.com/jayIves/rhyme-rnn-tensorflow
+  - 4 trainings models: (leider keine erklärung dazu)
+    - training
+    - line training (erkennen wo zeilenumbrüche)
+    - reverse training (von hinten nach vorne)
+    - post training
+  - resultate ziemlich gut, erkennt auch zeilenumbrüche
+  - "wortschatz" und sprachstil widerspiegeln rap
+  - teilweise funkitoniert auch reimen, allerdings oft mit selben wörtern am schluss (das checkt er ned)
+  - erstaunlich: generierten satz in google kopiert: erkennt, dass lyrics von kendrik lamar,
+    obwohl der satz nicht ident war!
+
+  - trainings graphs zeigen in tensorflow
+
+
+install:
+tensorflow-gpu
+six
+numpy
+
+Benchmark (100 Zeilen):
+NAIVE: 27sek
+SAMPLE: 45sek
+  
