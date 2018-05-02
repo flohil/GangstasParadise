@@ -1,4 +1,5 @@
-from rnnApi import rap, talk_about_yourself
+from rnnApi import talk_about_yourself, rap
+
 
 print(talk_about_yourself(lines=50))
 
