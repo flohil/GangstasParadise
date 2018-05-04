@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'Searfont';
+  src: url("../assets/Searfont.ttf");
+}
+
+@font-face {
+  font-family: 'Nosegrind';
+  src: url("../assets/Nosegrind.tff");
+}
+
+.app-layout {
+  margin: 50px;
+}
+
+.mat-card-header {
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.header {
+  justify-content: center;
+  font-family: Searfont;
+  color: white;
+  font-size: 100px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.card {
+  background-color: #d0d0d0;
+  color: #222;
+  font-family: Arial;
+  text-align: center;
+}
+
+.submit-button {
+  font-size: 15px;
+  background-color: #222;
+  color: white;
+}
