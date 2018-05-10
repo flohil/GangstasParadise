@@ -3,7 +3,14 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
-import {MatButtonModule, MatCardModule, MatDividerModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule, MatCardModule, MatDividerModule, MatFormField, MatFormFieldModule, MatIconModule, MatInputModule,
+  MatToolbarModule
+} from '@angular/material';
+import {TextGeneratorService} from './text-generator.service';
+import {HttpClientModule} from '@angular/common/http';
+import {MusicGeneratorService} from './music-generator.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 
@@ -13,12 +20,17 @@ import {MatButtonModule, MatCardModule, MatDividerModule, MatToolbarModule} from
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     MatCardModule,
     MatToolbarModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [TextGeneratorService, MusicGeneratorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
