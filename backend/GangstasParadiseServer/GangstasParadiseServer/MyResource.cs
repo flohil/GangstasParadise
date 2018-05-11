@@ -28,16 +28,21 @@ namespace GangstasParadiseServer {
 
         private const int LENGTH_OF_READ_TEXT = 600;
 
+        private static bool _useFreshlyGeneratedText = true;
+
         [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/generate")]
         public void StartSongGeneration(HttpListenerContext context) {
 
-            //JObject initParameter = GetJsonPayload(context.Request);
-            //CallShell(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
-
             string generatedText = "";
-            // get text from generated text file
-            using (StreamReader reader = new StreamReader(READ_GENERATED_TEXT_FROM)) {
-                generatedText = reader.ReadToEnd();
+            if (_useFreshlyGeneratedText) {
+                //JObject initParameter = GetJsonPayload(context.Request);
+                //CallShell(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
+                generatedText = CallShellAnGenerateRap("", 100);
+            } else {
+                // get text from generated text file
+                using (StreamReader reader = new StreamReader(READ_GENERATED_TEXT_FROM)) {
+                    generatedText = reader.ReadToEnd();
+                }
             }
 
             GenerateTextToSpeechFile(generatedText);
@@ -51,16 +56,22 @@ namespace GangstasParadiseServer {
             this.SendFileResponse(context, MIXED_MP3);
         }
 
-        private void CallShell(string primeText, int numberOfLines) {
-            string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n 100";
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.WorkingDirectory = WORKING_DIRECTORY_FOR_SHELL;
-            startInfo.UseShellExecute = true;
-            startInfo.FileName = @"C:\Windows\System32\cmd.exe";
-            startInfo.Verb = "runas";
-            startInfo.Arguments = "/c " + cmdText;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            Process.Start(startInfo);
+        private string CallShellAnGenerateRap(string primeText, int numberOfLines) {
+            string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n " + numberOfLines;
+            //string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n 100 > output.txt";
+            //string cmdText = @"python schemeSample.py --forward_dir=save/top25_3 --reversed_dir=reversed/top25_3 --post_dir=post/top25_3 --sample=2 -n 100 --prime=\""start text\"" > output.txt";
+            Process p = new Process();
+            p.StartInfo.WorkingDirectory = WORKING_DIRECTORY_FOR_SHELL;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.FileName = @"C:\Windows\System32\cmd.exe";
+            p.StartInfo.Verb = "runas";
+            p.StartInfo.Arguments = "/c " + cmdText;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+            return output;
         }        
 
         private void GenerateTextToSpeechFile(string generatedText) {
@@ -70,13 +81,13 @@ namespace GangstasParadiseServer {
                 //// Output information about all of the installed voices. 
                 //Console.WriteLine("Installed voices -");
                 //foreach (InstalledVoice voice in synth.GetInstalledVoices()) {
-                //    VoiceInfo info = voice.VoiceInfo;
-                //    Console.WriteLine(" Voice Name: " + info.Name);
+                //    Console.WriteLine(" Voice Name: " + voice.VoiceInfo.Description);
                 //}
                 ////Voice Name: Microsoft Hedda Desktop
                 ////Voice Name: Microsoft Zira Desktop
+                ////Voice Name: Microsoft Hazel Desktop
 
-                synth.SelectVoice("Microsoft Hedda Desktop");
+                synth.SelectVoice("Microsoft Hazel Desktop");
                 synth.Volume = 100;
                 synth.Rate = 0;
 
@@ -93,28 +104,10 @@ namespace GangstasParadiseServer {
 
         private void MixTextWithBeat() {
 
-            // resample music to mix it afterwards
-            int outRate = 16000;
-            var inFile = BEAT_MP3;
-            var outFile = BEAT_WAV;
-            using (var reader = new Mp3FileReader(inFile)) {
-                var outFormat = new WaveFormat(outRate, 16, 1);
-                using (var resampler = new MediaFoundationResampler(reader, outFormat)) {
-                    // resampler.ResamplerQuality = 60;
-                    WaveFileWriter.CreateWaveFile(outFile, resampler);
-                }
-            }
-
-            inFile = TTS_MP3;
-            outFile = TTS_WAV;
-            using (var reader = new Mp3FileReader(inFile)) {
-                var outFormat = new WaveFormat(outRate, 16, 1);
-                using (var resampler = new MediaFoundationResampler(reader, outFormat)) {
-                    // resampler.ResamplerQuality = 60;
-                    WaveFileWriter.CreateWaveFile(outFile, resampler);
-                }
-            }
-
+            // resample music to mix it afterwards            
+            Resample(BEAT_MP3, BEAT_WAV);
+            Resample(TTS_MP3, TTS_WAV);
+            
             WaveFileReader mpbackground = new WaveFileReader(BEAT_WAV);
             WaveFileReader mpMessage = new WaveFileReader(TTS_WAV);
 
@@ -149,6 +142,16 @@ namespace GangstasParadiseServer {
 
             //encode the wave stream into mp3
             ConvertWavStreamToMp3File(wave32, MIXED_MP3);
+        }
+
+        private void Resample(string inFile, string outFile) {
+            using (var reader = new Mp3FileReader(inFile)) {
+                var outFormat = new WaveFormat(16000, 16, 1);
+                using (var resampler = new MediaFoundationResampler(reader, outFormat)) {
+                    // resampler.ResamplerQuality = 60;
+                    WaveFileWriter.CreateWaveFile(outFile, resampler);
+                }
+            }
         }
 
         private void ConvertWavStreamToMp3File(Wave32To16Stream wavFile, string saveToPath) {

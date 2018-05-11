@@ -13,3 +13,18 @@ C:\Users\MaxAl\Documents\Visual Studio 2017\Projects\GangstasParadiseServer\Gang
 C:\Users\MaxAl\Documents\Visual Studio 2017\Projects\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.dll
 C:\Users\MaxAl\Documents\Visual Studio 2017\Projects\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.Lame.dll
 C:\Users\MaxAl\Documents\Visual Studio 2017\Projects\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.xml
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.32.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.64.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.exe.config
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.exe
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.pdb
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GrapevinePlus.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.Lame.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.xml
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csproj.CoreCompileInputs.cache
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.exe
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.pdb
+C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojResolveAssemblyReference.cache
