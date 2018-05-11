@@ -2,32 +2,23 @@
   <mat-toolbar class="header">Gangstas Paradise</mat-toolbar>
   <mat-card class="card">
     <mat-card-header>
-      <button mat-button class="submit-button">Check the Rhyme</button>
+      <button mat-button class="submit-button" (click)="checkTheRyme()">Check the Rhyme</button>
+      <button mat-button class="submit-button" *ngIf="!audio" (click)="beatIt()">Beat It</button>
+      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="play()" [disabled]="!isPaused">
+        <mat-icon fontSet="fa" fontIcon="fa-play"></mat-icon>
+      </button>
+      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="pause()" [disabled]="isPaused">
+        <mat-icon fontSet="fa" fontIcon="fa-pause"></mat-icon>
+      </button>
+      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="stop()">
+        <mat-icon fontSet="fa" fontIcon="fa-stop"></mat-icon>
+      </button>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div style="white-space:pre-wrap;">
-        Lorem ipsum dolor sit amet,
-        consetetur sadipscing elitr,
-        sed diam nonumy eirmod tempor
-        invidunt ut labore et dolore magna
-        aliquyam erat, sed diam voluptua.
-        At vero eos et accusam et justo duo
-        dolores et ea rebum. Stet clita
-        kasd gubergren, no sea takimata sanctus
-        est Lorem ipsum dolor sit amet.
-        Lorem ipsum dolor sit amet,
-        consetetur sadipscing elitr,
-        sed diam nonumy eirmod tempor invidunt ut
-        labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero
-        eos et accusam et justo duo
-        dolores et ea rebum. Stet
-        clita kasd gubergren,
-        no sea takimata sanctus est
-        Lorem ipsum dolor sit amet.
+        {{(response$ | async)?.text}}
       </div>
-
     </mat-card-content>
 
   </mat-card>
