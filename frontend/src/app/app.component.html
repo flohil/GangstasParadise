@@ -1,5 +1,5 @@
 <div class="app-layout">
-  <mat-toolbar class="header">Gangstas Paradise</mat-toolbar>
+  <div class="header">Gangstas Paradise</div>
   <mat-card class="card">
     <mat-card-header>
       <button mat-button class="submit-button" (click)="checkTheRyme()">Check the Rhyme</button>
@@ -16,6 +16,9 @@
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
+      <div *ngIf="isLoading">
+        <i style="font-size: 80px" class="fas fa-spinner fa-pulse"></i>
+      </div>
       <div style="white-space:pre-wrap;">
         {{(response$ | async)?.text}}
       </div>

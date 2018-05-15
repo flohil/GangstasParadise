@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {
   MatButtonModule, MatCardModule, MatDividerModule, MatFormField, MatFormFieldModule, MatIconModule, MatInputModule,
+  MatProgressSpinnerModule,
   MatToolbarModule
 } from '@angular/material';
 import {TextGeneratorService} from './text-generator.service';
@@ -28,6 +29,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     HttpClientModule
   ],
   providers: [TextGeneratorService, MusicGeneratorService],

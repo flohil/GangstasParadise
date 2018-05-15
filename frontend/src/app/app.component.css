@@ -9,7 +9,8 @@
 }
 
 .app-layout {
-  margin: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .mat-card-header {
@@ -23,7 +24,7 @@
   font-size: 100px;
   text-align: center;
   width: 100%;
-  margin-bottom: 25px;
+  height: auto;
 }
 
 .card {

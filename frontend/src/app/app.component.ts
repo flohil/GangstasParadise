@@ -10,18 +10,23 @@ import {MusicGeneratorService} from './music-generator.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-
+export class AppComponent implements OnInit {
   response$: Observable<ResponseModel>;
   audio: HTMLAudioElement;
   isPaused: boolean = true;
 
+  isLoading: boolean = false;
+
   constructor(private _textGeneratorService: TextGeneratorService,
               public _musicGeneratorService: MusicGeneratorService) {}
 
+  ngOnInit(): void {  }
+
   checkTheRyme() {
+    this.isLoading = true;
     const request = new RequestModel('rapgod', 5);
-    this.response$ = this._textGeneratorService.loadText(request)
+    this.response$ = this._textGeneratorService.loadText(request);
+    this.response$.subscribe(next => this.isLoading = false);
   }
 
   beatIt() {
