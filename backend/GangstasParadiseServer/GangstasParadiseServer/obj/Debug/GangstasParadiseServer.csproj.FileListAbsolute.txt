@@ -28,7 +28,6 @@ C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseSer
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.exe
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.pdb
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojResolveAssemblyReference.cache
-D:\development\git\FHTW\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojAssemblyReference.cache
 D:\development\git\FHTW\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csproj.CoreCompileInputs.cache
 D:\development\git\FHTW\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.32.dll
 D:\development\git\FHTW\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.64.dll
