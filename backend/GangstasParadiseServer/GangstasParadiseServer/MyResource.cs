@@ -13,10 +13,11 @@ using System.Text;
 
 namespace GangstasParadiseServer {
     public sealed class MyResource : RESTResource {
-
-        private const string READ_GENERATED_TEXT_FROM = @"D:\development\git\FHTW\mal2\backend\finalSamples\Scheme\top25_3.txt";
+        
+        private const string READ_GENERATED_TEXT_FROM = @"D:\development\git\FHTW\mal2\backend\output.txt";
         private const string WORKING_DIRECTORY_FOR_SHELL = @"D:\development\git\FHTW\mal2\backend";
         private const string MUSIC_DIRECTORY = @"C:\Users\pKAisinger\Music\";
+
 
         private const string TTS_MP3 = MUSIC_DIRECTORY + "TextSample.mp3";
         private const string BEAT_MP3 = MUSIC_DIRECTORY + "BeatSample.mp3";
@@ -35,9 +36,18 @@ namespace GangstasParadiseServer {
 
             string generatedText = "";
             if (_useFreshlyGeneratedText) {
-                //JObject initParameter = GetJsonPayload(context.Request);
+                JObject initParameter = GetJsonPayload(context.Request);
+
+                if (initParameter == null) {
+                    initParameter = new JObject();
+                    initParameter.Add("primetext", "prime test text");
+                    initParameter.Add("numberoflines", 100);
+                }
+
                 //CallShell(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
-                generatedText = CallShellAnGenerateRap("", 10);
+
+                generatedText = CallShellAnGenerateRap(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
+
             } else {
                 // get text from generated text file
                 using (StreamReader reader = new StreamReader(READ_GENERATED_TEXT_FROM)) {
@@ -56,9 +66,9 @@ namespace GangstasParadiseServer {
         }
 
         private string CallShellAnGenerateRap(string primeText, int numberOfLines) {
-            string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n " + numberOfLines;
+            //string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n " + numberOfLines;
             //string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n 100 > output.txt";
-            //string cmdText = @"python schemeSample.py --forward_dir=save/top25_3 --reversed_dir=reversed/top25_3 --post_dir=post/top25_3 --sample=2 -n 100 --prime=\""start text\"" > output.txt";
+            string cmdText = "python schemeSample.py --forward_dir=save/top25_3 --reversed_dir=reversed/top25_3 --post_dir=post/top25_3 --sample=2 -n 100 --prime=\"start text\"";
             Process p = new Process();
             p.StartInfo.WorkingDirectory = WORKING_DIRECTORY_FOR_SHELL;
             p.StartInfo.UseShellExecute = false;
@@ -70,6 +80,12 @@ namespace GangstasParadiseServer {
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
+
+            // save textfile
+            using (StreamWriter writer = new StreamWriter(READ_GENERATED_TEXT_FROM)) {
+                writer.Write(output);
+            }
+
             return output;
         }        
 
