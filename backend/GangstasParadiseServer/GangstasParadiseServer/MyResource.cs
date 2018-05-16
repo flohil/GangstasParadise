@@ -14,9 +14,9 @@ using System.Text;
 namespace GangstasParadiseServer {
     public sealed class MyResource : RESTResource {
 
-        private const string READ_GENERATED_TEXT_FROM = @"C:\Users\MaxAl\Documents\mal2\backend\finalSamples\Scheme\top25_3.txt";
-        private const string WORKING_DIRECTORY_FOR_SHELL = @"C:\Users\MaxAl\Documents\mal2\backend";
-        private const string MUSIC_DIRECTORY = @"C:\Users\MaxAl\Music\";
+        private const string READ_GENERATED_TEXT_FROM = @"D:\development\git\FHTW\mal2\backend\finalSamples\Scheme\top25_3.txt";
+        private const string WORKING_DIRECTORY_FOR_SHELL = @"D:\development\git\FHTW\mal2\backend";
+        private const string MUSIC_DIRECTORY = @"C:\Users\pKAisinger\Music\";
 
         private const string TTS_MP3 = MUSIC_DIRECTORY + "TextSample.mp3";
         private const string BEAT_MP3 = MUSIC_DIRECTORY + "BeatSample.mp3";
@@ -26,7 +26,7 @@ namespace GangstasParadiseServer {
 
         private const string MIXED_MP3 = MUSIC_DIRECTORY + "MixedSample.mp3";
 
-        private const int LENGTH_OF_READ_TEXT = 600;
+        private const int LENGTH_OF_READ_TEXT = 60;
 
         private static bool _useFreshlyGeneratedText = true;
 
@@ -37,15 +37,14 @@ namespace GangstasParadiseServer {
             if (_useFreshlyGeneratedText) {
                 //JObject initParameter = GetJsonPayload(context.Request);
                 //CallShell(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
-                generatedText = CallShellAnGenerateRap("", 100);
+                generatedText = CallShellAnGenerateRap("", 10);
             } else {
                 // get text from generated text file
                 using (StreamReader reader = new StreamReader(READ_GENERATED_TEXT_FROM)) {
                     generatedText = reader.ReadToEnd();
                 }
             }
-
-            GenerateTextToSpeechFile(generatedText);
+           
 
             this.SendTextResponse(context, generatedText.Substring(0, LENGTH_OF_READ_TEXT), Encoding.UTF8);            
         }
@@ -87,7 +86,7 @@ namespace GangstasParadiseServer {
                 ////Voice Name: Microsoft Zira Desktop
                 ////Voice Name: Microsoft Hazel Desktop
 
-                synth.SelectVoice("Microsoft Hazel Desktop");
+                synth.SelectVoice("Microsoft Hedda Desktop");
                 synth.Volume = 100;
                 synth.Rate = 0;
 

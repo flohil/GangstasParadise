@@ -7210,7 +7210,7 @@
             Creates the sink writer from a URL or byte stream.
             </summary>
         </member>
-        <member name="M:NAudio.MediaFoundation.MediaFoundationInterop.MFCreateMFByteStreamOnStream(System.Runtime.InteropServices.ComTypes.IStream,NAudio.MediaFoundation.IMFByteStream@)">
+        <member name="M:NAudio.MediaFoundation.MediaFoundationInterop.MFCreateMFByteStreamOnStreamEx(System.Object,NAudio.MediaFoundation.IMFByteStream@)">
             <summary>
             Creates a Microsoft Media Foundation byte stream that wraps an IRandomAccessStream object.
             </summary>
@@ -9388,13 +9388,6 @@
             Opens a MIDI file for reading
             </summary>
             <param name="filename">Name of MIDI file</param>
-            <param name="strictChecking">If true will error on non-paired note events</param>
-        </member>
-        <member name="M:NAudio.Midi.MidiFile.#ctor(System.IO.Stream,System.Boolean)">
-            <summary>
-            Opens a MIDI file stream for reading
-            </summary>
-            <param name="inputStream">The input stream containing a MIDI file</param>
             <param name="strictChecking">If true will error on non-paired note events</param>
         </member>
         <member name="P:NAudio.Midi.MidiFile.Events">
@@ -16091,11 +16084,6 @@
             The maximum number of output channels this ASIO driver supports
             </summary>
         </member>
-        <member name="P:NAudio.Wave.AsioOut.FramesPerBuffer">
-            <summary>
-            The number of samples per channel, per buffer.
-            </summary>
-        </member>
         <member name="P:NAudio.Wave.AsioOut.ChannelOffset">
             <summary>
             By default the first channel on the input WaveProvider is sent to the first ASIO output.
@@ -17151,8 +17139,7 @@
             <summary>
             Gets or sets the device number
             Should be set before a call to Init
-            This must be between -1 and <see>DeviceCount</see> - 1.
-            -1 means stick to default device even default device is changed
+            This must be between 0 and <see>DeviceCount</see> - 1.
             </summary>
         </member>
         <member name="M:NAudio.Wave.WaveOut.#ctor">
@@ -17264,8 +17251,7 @@
             <summary>
             Gets or sets the device number
             Should be set before a call to Init
-            This must be between -1 and <see>DeviceCount</see> - 1.
-            -1 means stick to default device even default device is changed
+            This must be between 0 and <see>DeviceCount</see> - 1.
             </summary>
         </member>
         <member name="M:NAudio.Wave.WaveOutEvent.#ctor">
@@ -17966,11 +17952,6 @@
             </summary>
             <param name="fileName">File Name</param>
         </member>
-        <member name="P:NAudio.Wave.AudioFileReader.FileName">
-            <summary>
-            File Name
-            </summary>
-        </member>
         <member name="P:NAudio.Wave.AudioFileReader.WaveFormat">
             <summary>
             WaveFormat of this stream
@@ -18174,7 +18155,7 @@
             <param name="cueChunkData">The data contained in the cue chunk</param>
             <param name="listChunkData">The data contained in the list chunk</param>
         </member>
-        <member name="M:NAudio.Wave.CueList.GetRiffChunks">
+        <member name="M:NAudio.Wave.CueList.GetRIFFChunks">
             <summary>
             Gets the cues as the concatenated cue and list RIFF chunks.
             </summary>
@@ -19353,7 +19334,7 @@
         </member>
         <member name="P:NAudio.Dmo.DmoDescriptor.Clsid">
             <summary>
-            CLSID
+            Clsid
             </summary>
         </member>
         <member name="M:NAudio.Dmo.DmoDescriptor.#ctor(System.String,System.Guid)">
