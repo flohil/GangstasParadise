@@ -17,6 +17,9 @@ export class AppComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  initialText: string = 'PrimeText';
+  lineNumbers: number = 20;
+
   constructor(private _textGeneratorService: TextGeneratorService,
               public _musicGeneratorService: MusicGeneratorService) {}
 
@@ -24,9 +27,10 @@ export class AppComponent implements OnInit {
 
   checkTheRyme() {
     this.isLoading = true;
-    const request = new RequestModel('rapgod', 5);
+    const request = new RequestModel(this.initialText, this.lineNumbers);
+    console.log('built request: \n' + JSON.stringify(request));
     this.response$ = this._textGeneratorService.loadText(request);
-    this.response$.subscribe(next => this.isLoading = false);
+    this.response$.subscribe(next => this.isLoading = false, () => this.isLoading = false);
   }
 
   beatIt() {

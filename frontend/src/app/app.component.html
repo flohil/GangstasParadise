@@ -2,18 +2,31 @@
   <div class="header">Gangstas Paradise</div>
   <mat-card class="card">
     <mat-card-header>
-      <button mat-button class="submit-button" (click)="checkTheRyme()">Check the Rhyme</button>
-      <button mat-button class="submit-button" *ngIf="!audio" (click)="beatIt()">Beat It</button>
-      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="play()" [disabled]="!isPaused">
-        <mat-icon fontSet="fa" fontIcon="fa-play"></mat-icon>
-      </button>
-      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="pause()" [disabled]="isPaused">
-        <mat-icon fontSet="fa" fontIcon="fa-pause"></mat-icon>
-      </button>
-      <button mat-icon-button class="submit-button" *ngIf="audio" (click)="stop()">
-        <mat-icon fontSet="fa" fontIcon="fa-stop"></mat-icon>
-      </button>
+      <button style="width: 180px;" mat-button class="submit-button" (click)="checkTheRyme()">Check the Rhyme</button>
+      <button style="width: 180px;" mat-button class="submit-button" *ngIf="!audio" (click)="beatIt()">Beat It</button>
+      <div style="width: 180px;" *ngIf="audio">
+        <button mat-icon-button class="submit-button" (click)="play()" [disabled]="!isPaused">
+          <mat-icon fontSet="fa" fontIcon="fa-play"></mat-icon>
+        </button>
+        <button mat-icon-button class="submit-button" (click)="pause()" [disabled]="isPaused">
+          <mat-icon fontSet="fa" fontIcon="fa-pause"></mat-icon>
+        </button>
+        <button mat-icon-button class="submit-button" (click)="stop()">
+          <mat-icon fontSet="fa" fontIcon="fa-stop"></mat-icon>
+        </button>
+      </div>
     </mat-card-header>
+
+    <div class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="initialText" placeholder="Prime-Text">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="lineNumbers" placeholder="Number Of Lines">
+      </mat-form-field>
+    </div>
+
     <mat-divider></mat-divider>
     <mat-card-content>
       <div *ngIf="isLoading">

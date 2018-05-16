@@ -12,6 +12,7 @@ import {TextGeneratorService} from './text-generator.service';
 import {HttpClientModule} from '@angular/common/http';
 import {MusicGeneratorService} from './music-generator.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule} from '@angular/forms';
 
 
 
@@ -30,7 +31,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [TextGeneratorService, MusicGeneratorService],
   bootstrap: [AppComponent]
