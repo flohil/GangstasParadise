@@ -15,8 +15,15 @@ export class TextGeneratorService {
   constructor(private _httpClient: HttpClient) { }
 
   loadText(request: RequestModel): Observable<ResponseModel> {
-    return this._httpClient.get(TextGeneratorService.OFFLINE_PATH)
-      .map(next => next as ResponseModel);
+    return this._httpClient.get(TextGeneratorService.ONLINE_PATH)
+      .map(this.createResponseModel);
+  }
+
+  createResponseModel(text: string): ResponseModel {
+    const model: ResponseModel = {
+      text: text
+    };
+    return model;
   }
 
 }
