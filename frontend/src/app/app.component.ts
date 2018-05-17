@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   isPaused: boolean = true;
 
   isLoading: boolean = false;
+  res: ResponseModel = {"text": ""};
 
   initialText: string = ' ';
   lineNumbers: number = 50;
@@ -31,7 +32,13 @@ export class AppComponent implements OnInit {
     console.log('built request: \n' + JSON.stringify(request));
 
     this.response$ = this._textGeneratorService.loadText(request);
-    this.response$.subscribe(next => this.isLoading = false, () => this.isLoading = false);
+    this.response$.subscribe(next => {
+      this.isLoading = false
+      this.res = next
+    }, error => {
+      this.isLoading = false
+      this.res = {"text": "Error"}
+    });
   }
 
   beatIt() {

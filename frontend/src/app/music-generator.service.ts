@@ -10,7 +10,7 @@ export class MusicGeneratorService {
 
   beatIt() {
     const audio = new Audio();
-    audio.src = MusicGeneratorService.ONLINE_PATH;
+    audio.src = MusicGeneratorService.ONLINE_PATH + "?id=" + Date.now();
     audio.load();
     return audio;
   }

@@ -17,17 +17,22 @@ export class TextGeneratorService {
 
   loadText(request: RequestModel): Observable<ResponseModel> {
     // need to use post request because backend can only load body payload for post requests
-    return this._httpClient.post<any>(
+
+    const headers = new HttpHeaders()
+
+    return this._httpClient.post(
       TextGeneratorService.API_PROXY_PATH,
-      JSON.stringify(request)
-    ).map(text => this.createResponseModel(text))
+      JSON.stringify(request),
+      {
+        responseType: 'text'
+      }
+    ).map(res => this.createResponseModel(res))
   }
 
   createResponseModel(text: string): ResponseModel {
     const model: ResponseModel = {
-      text: text
+      text: text.trim()
     };
     return model;
   }
-
 }
