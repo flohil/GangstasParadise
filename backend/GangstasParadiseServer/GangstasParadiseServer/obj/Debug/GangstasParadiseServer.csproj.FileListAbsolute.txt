@@ -28,3 +28,17 @@ C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseSer
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.exe
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.pdb
 C:\Users\MaxAl\Documents\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojResolveAssemblyReference.cache
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.32.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\libmp3lame.64.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.exe.config
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.exe
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GangstasParadiseServer.pdb
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\GrapevinePlus.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.Lame.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\NAudio.xml
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojResolveAssemblyReference.cache
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.exe
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.pdb

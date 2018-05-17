@@ -14,9 +14,9 @@ using System.Text;
 namespace GangstasParadiseServer {
     public sealed class MyResource : RESTResource {
 
-        private const string READ_GENERATED_TEXT_FROM = @"C:\Users\MaxAl\Documents\mal2\backend\output.txt";
-        private const string WORKING_DIRECTORY_FOR_SHELL = @"C:\Users\MaxAl\Documents\mal2\backend";
-        private const string MUSIC_DIRECTORY = @"C:\Users\MaxAl\Music\";
+        private const string READ_GENERATED_TEXT_FROM = @"C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\output.txt";
+        private const string WORKING_DIRECTORY_FOR_SHELL = @"C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend";
+        private const string MUSIC_DIRECTORY = @"C:\Users\Flo\Music\";
 
         private const string TTS_MP3 = MUSIC_DIRECTORY + "TextSample.mp3";
         private const string BEAT_MP3 = MUSIC_DIRECTORY + "BeatSample.mp3";
@@ -30,7 +30,7 @@ namespace GangstasParadiseServer {
 
         private static bool _useFreshlyGeneratedText = true;
 
-        [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/generate")]
+        [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/generate")]
         public void StartSongGeneration(HttpListenerContext context) {
 
             string generatedText = "";
@@ -39,12 +39,12 @@ namespace GangstasParadiseServer {
 
                 if (initParameter == null) {
                     initParameter = new JObject();
-                    initParameter.Add("primetext", "prime test text");
-                    initParameter.Add("numberoflines", 100);
+                    initParameter.Add("primeText", " ");
+                    initParameter.Add("numberOfLines", 50);
                 }
 
                 //CallShell(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
-                generatedText = CallShellAnGenerateRap(initParameter.GetValue("primetext").ToString(), int.Parse(initParameter.GetValue("numberoflines").ToString()));
+                generatedText = CallShellAnGenerateRap(initParameter.GetValue("primeText").ToString(), int.Parse(initParameter.GetValue("numberOfLines").ToString()));
             } else {
                 // get text from generated text file
                 using (StreamReader reader = new StreamReader(READ_GENERATED_TEXT_FROM)) {
@@ -54,19 +54,29 @@ namespace GangstasParadiseServer {
 
             GenerateTextToSpeechFile(generatedText);
 
-            this.SendTextResponse(context, generatedText.Substring(0, LENGTH_OF_READ_TEXT), Encoding.UTF8);            
+            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+
+            this.SendTextResponse(context, generatedText, Encoding.UTF8);
+            // this.SendTextResponse(context, generatedText.Substring(0, LENGTH_OF_READ_TEXT), Encoding.UTF8);
         }
 
         [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/mix")]
         public void GetGeneratedFile(HttpListenerContext context) {
             MixTextWithBeat();
-            this.SendFileResponse(context, MIXED_MP3);
+            try
+            {
+                this.SendFileResponse(context, MIXED_MP3);
+            }
+            catch (Exception e)
+            {
+                // dont know why this is thrown, it works anyway
+            }
         }
 
         private string CallShellAnGenerateRap(string primeText, int numberOfLines) {
             //string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n " + numberOfLines;
             //string cmdText = @"python naiveSample.py --forward_dir=save\top25_3 --reversed_dir=reversed\top25_3 --post_dir=post\top25_3 --sample=2 -n 100 > output.txt";
-            string cmdText = "python schemeSample.py --forward_dir=save/top25_3 --reversed_dir=reversed/top25_3 --post_dir=post/top25_3 --sample=2 -n 100 --prime=\"start text\"";
+            string cmdText = "python schemeSample.py --forward_dir=save/top25_3 --reversed_dir=reversed/top25_3 --post_dir=post/top25_3 --sample=2 -n " + numberOfLines + " --prime=\"" + primeText + "\"";
             Process p = new Process();
             p.StartInfo.WorkingDirectory = WORKING_DIRECTORY_FOR_SHELL;
             p.StartInfo.UseShellExecute = false;
@@ -92,15 +102,15 @@ namespace GangstasParadiseServer {
             using (SpeechSynthesizer synth = new SpeechSynthesizer()) {
 
                 //// Output information about all of the installed voices. 
-                //Console.WriteLine("Installed voices -");
-                //foreach (InstalledVoice voice in synth.GetInstalledVoices()) {
-                //    Console.WriteLine(" Voice Name: " + voice.VoiceInfo.Description);
-                //}
+                Console.WriteLine("Installed voices -");
+                foreach (InstalledVoice voice in synth.GetInstalledVoices()) {
+                    Console.WriteLine(" Voice Name: " + voice.VoiceInfo.Description);
+                }
                 ////Voice Name: Microsoft Hedda Desktop
                 ////Voice Name: Microsoft Zira Desktop
                 ////Voice Name: Microsoft Hazel Desktop
 
-                synth.SelectVoice("Microsoft Hedda Desktop");
+                synth.SelectVoice("Microsoft David Desktop");
                 synth.Volume = 100;
                 synth.Rate = 0;
 
@@ -108,7 +118,8 @@ namespace GangstasParadiseServer {
                 MemoryStream ms = new MemoryStream();
                 synth.SetOutputToWaveStream(ms);
 
-                synth.Speak(generatedText.Substring(0, LENGTH_OF_READ_TEXT));
+                synth.Speak(generatedText);
+                // synth.Speak(generatedText.Substring(0, LENGTH_OF_READ_TEXT));
 
                 // generate mp3
                 ConvertWavStreamToMp3File(ref ms, TTS_MP3);
