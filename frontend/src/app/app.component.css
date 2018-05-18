@@ -24,7 +24,7 @@
   font-size: 100px;
   text-align: center;
   width: 100%;
-  height: auto;
+  margin-bottom: -25px;
 }
 
 .card {
@@ -40,4 +40,25 @@
   color: white;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.rap-text-content {
+  white-space: pre-wrap;
+  font-size: 20px;
+}
+
+.loading-icon {
+  font-size: 75px;
+  padding-top: 15px;
+}
+
+.mat-icon-button[disabled][disabled] {
+  color: grey;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }

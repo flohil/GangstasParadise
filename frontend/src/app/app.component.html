@@ -17,22 +17,22 @@
       </div>
     </mat-card-header>
 
-    <div class="example-form">
-      <mat-form-field class="example-full-width">
+    <div>
+      <mat-form-field>
         <input matInput [(ngModel)]="initialText" placeholder="Prime-Text">
       </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-        <input matInput [(ngModel)]="lineNumbers" placeholder="Number Of Lines">
+      <mat-form-field>
+        <input matInput [(ngModel)]="lineNumbers" type="number" placeholder="Number Of Lines">
       </mat-form-field>
     </div>
 
     <mat-divider></mat-divider>
-    <mat-card-content>
-      <div *ngIf="isLoading">
-        <i style="font-size: 80px" class="fas fa-spinner fa-pulse"></i>
+    <mat-card-content style="min-height: 110px">
+      <div *ngIf="isLoading" class="loading-icon">
+        <i class="fas fa-spinner fa-pulse"></i>
       </div>
-      <div style="white-space:pre-wrap;">
+      <div class="rap-text-content" *ngIf="!isLoading">
         {{res.text}}
       </div>
     </mat-card-content>
