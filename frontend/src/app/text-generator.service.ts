@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TextGeneratorService {
 
-  private static readonly API_PROXY_PATH: string = '/api/generate';
+  private static readonly API_PROXY_PATH: string = 'http://localhost:1234/generate';
 
   constructor(private _httpClient: HttpClient) { }
 
@@ -22,7 +22,7 @@ export class TextGeneratorService {
       {
         responseType: 'text'
       }
-    ).map(res => this.createResponseModel(res))
+    ).map(res => this.createResponseModel(res));
   }
 
   createResponseModel(text: string): ResponseModel {
