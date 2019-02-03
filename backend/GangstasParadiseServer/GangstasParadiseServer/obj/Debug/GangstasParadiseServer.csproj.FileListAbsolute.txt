@@ -42,3 +42,4 @@ C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasPa
 C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csprojResolveAssemblyReference.cache
 C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.exe
 C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.pdb
+C:\Users\Flo\Documents\MSE\4\MAL2\mal2\backend\GangstasParadiseServer\GangstasParadiseServer\obj\Debug\GangstasParadiseServer.csproj.CoreCompileInputs.cache
